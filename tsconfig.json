@@ -1,0 +1,43 @@
+{
+  "compilerOptions": {
+    /* Modules */
+    "lib": ["esnext", "dom", "dom.iterable", "scripthost"],
+    "esModuleInterop": true,
+    "outDir": "dist/",
+    "module": "commonjs",
+    "target": "es2016",
+    /* Type Checking */
+    "baseUrl": "./",
+    "experimentalDecorators": true,
+    "moduleResolution": "node",
+    "paths": {
+      "@connection/*": ["connections/*"],
+      "@constants": ["constants.ts"],
+      "@logger": ["logger.ts"],
+      "@utils/*": ["utils/*"],
+      "@validations/*": ["validations/*"],
+      "@rooms/*": ["rooms/*"],
+      "@states/*": ["states/*"],
+      "@repositories/*": ["repositories/*"],
+      "@services/*": ["services/*"],
+      "@errors/*": ["errors/*"],
+      "@interfaces/*": ["interfaces/*"],
+      "@models/*": ["models/*"],
+      "@test/*": ["test/*"]
+    }
+  },
+  "exclude": ["node_modules"],
+  "include": ["**/*"],
+  "moduleResolution": "node",
+  "sourceMap": true,
+  "noUnusedLocals": true,
+  "noUnusedParameters": true,
+  "forceConsistentCasingInFileNames": true,
+  "skipLibCheck": true,
+  "pretty": true,
+  "allowUnreachableCode": false,
+  "experimentalDecorators": true,
+  "emitDecoratorMetadata": true,
+  "types": ["node", "jest", "reflect-metadata"]
+
+}
