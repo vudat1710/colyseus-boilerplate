@@ -11,6 +11,11 @@ export class GameRoom extends Room<PVERoom> {
   private gameService: IGameService = new GameService();
   //   currentPlayer: Player;
 
+  public onCreate(options: any): void | Promise<any> {
+    logger.info("Room is created!");
+    this.reset();
+  }
+
   public onJoin = async (
     client: Client,
     options: {
@@ -34,36 +39,30 @@ export class GameRoom extends Room<PVERoom> {
     this.state.player = player;
     this.state.enemy = enemy;
     this.state.currentTurn = client.sessionId;
+    this.state.didWin = false;
     this.lock();
   };
 
-  onLeave(client) {
+  onLeave(client: Client) {
     logger.info(`client left ${client.sessionId}`);
 
     delete this.state.player;
     this.playerCount--;
   }
 
-  //     onMessage (client, message) {
-  //         console.log("message received", message);
+  private onCombatMessage = () => {
+    this.onMessage("attack", (client: Client, data: any) => {
 
-  //         if (!message) return;
-
-  //         let player: Player = this.state.player;
-
-  //         if (!player) return;
-
-  //         let command: string = message['command'];
-
-  //         switch (command) {
-  //             case 'init':
-  //                 let newPlayer =
-  //             default:
-  //                 console.log('unknown command');
-  //         }
-  //     }
+    })
+  }
 
   onDispose() {
     logger.info("room destroyed!");
+  }
+
+  private reset() {
+    this.state.currentTurn = "";
+    this.state.didWin = false;
+    this.unlock();
   }
 }
