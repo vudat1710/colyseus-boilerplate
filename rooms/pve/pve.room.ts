@@ -14,6 +14,7 @@ export class GameRoom extends Room<PVERoom> {
   public onCreate(options: any): void | Promise<any> {
     logger.info("Room is created!");
     this.reset();
+    this.onCombatMessage();
   }
 
   public onJoin = async (
@@ -38,7 +39,6 @@ export class GameRoom extends Room<PVERoom> {
 
     this.state.player = player;
     this.state.enemy = enemy;
-    this.state.currentTurn = client.sessionId;
     this.state.didWin = false;
     this.lock();
   };
@@ -51,17 +51,30 @@ export class GameRoom extends Room<PVERoom> {
   }
 
   private onCombatMessage = () => {
-    this.onMessage("attack", (client: Client, data: any) => {
+    this.onMessage("attack", (_client: Client, data: { damage: number }) => {
+      this.state.enemy.health -= data.damage;
+      if (this.state.enemy.health <= 0) {
+        this.state.didWin = true;
+      } else {
+        this.broadcast("bot-attacking");
+      }
+    });
 
-    })
-  }
+    this.onMessage("bot-attack", (_client: Client, data: { damage: number }) => {
+      this.state.player.health -= data.damage;
+      if (this.state.player.health <= 0) {
+        this.state.didWin = false;
+      } else {
+        this.broadcast("client-attacking");
+      }
+    });
+  };
 
   onDispose() {
     logger.info("room destroyed!");
   }
 
   private reset() {
-    this.state.currentTurn = "";
     this.state.didWin = false;
     this.unlock();
   }

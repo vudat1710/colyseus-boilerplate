@@ -28,6 +28,7 @@
     "@test": "dist/test"
   },
   "dependencies": {
+    "@colyseus/command": "^0.2.1",
     "@colyseus/monitor": "^0.14.22",
     "@colyseus/proxy": "^0.12.7",
     "@colyseus/uwebsockets-transport": "^0.14.27",

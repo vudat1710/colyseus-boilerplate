@@ -4,9 +4,6 @@ import { Enemy } from "@states/enemy/enemy.state";
 import { Player } from "@states/player/player.state";
 
 export class PVERoom extends Schema {
-  @type("string")
-  currentTurn: string;
-
   @type(Player)
   player: Player;
 
@@ -18,7 +15,6 @@ export class PVERoom extends Schema {
 
   constructor(pveRoom: IPvERoom) {
     super();
-    this.currentTurn = pveRoom.currentTurn;
     this.player = new Player(pveRoom.player);
     this.enemy = new Enemy(pveRoom.enemy);
   }
