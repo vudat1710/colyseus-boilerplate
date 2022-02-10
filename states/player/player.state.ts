@@ -4,11 +4,17 @@ import { getRandomArbitrary } from "@utils/utils";
 import { TPlayer } from "@interfaces/game/game.interface";
 
 export class Player extends Schema {
+  @type("int16")
+  playerId: number;
+
   @type("string")
   sessionId: string;
 
   @type("int16")
   seat: number;
+
+  @type("string")
+  username: string;
 
   @type("int16")
   health: number;
@@ -19,10 +25,8 @@ export class Player extends Schema {
   constructor(player: TPlayer) {
     super();
 
+    this.username = player.username;
     this.health = player.health;
-    const a = player.skills.map(
-      (skill) => new Skill(skill.name, skill.minDamage, skill.maxDamage)
-    );
     this.skills = new ArraySchema<Skill>(
       ...player.skills.map(
         (skill) => new Skill(skill.name, skill.minDamage, skill.maxDamage)

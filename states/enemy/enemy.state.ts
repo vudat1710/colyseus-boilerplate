@@ -2,6 +2,9 @@ import { Schema, type } from "@colyseus/schema";
 import { TEnemy } from "@interfaces/game/game.interface";
 
 export class Enemy extends Schema {
+  @type("int16")
+  enemyId: number;
+
   @type("string")
   name: string;
 
@@ -16,6 +19,7 @@ export class Enemy extends Schema {
 
   constructor(enemy: TEnemy) {
     super();
+    this.enemyId = enemy.enemyId;
     this.name = enemy.name;
     this.minDamage = enemy.minDamage;
     this.maxDamage = enemy.maxDamage;

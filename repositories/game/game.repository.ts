@@ -24,6 +24,7 @@ export class GameRepository implements IGameRepository {
         [playerId]
       );
       const player: TPlayer = {
+        playerId: result[0].playerId,
         username: result[0].username,
         health: result[0].health,
         skills: result.map((row) => ({
@@ -48,10 +49,13 @@ export class GameRepository implements IGameRepository {
     enemyId: number
   ): Promise<boolean> => {
     try {
-      await logConnection.func(
-        GAME_PROCEDURES.INSERT_ACTION_LOG,
-        [playerId, enemyId, message, match_type, new Date().getTime()]
-      );
+      await logConnection.func(GAME_PROCEDURES.INSERT_ACTION_LOG, [
+        playerId,
+        enemyId,
+        message,
+        match_type,
+        new Date().getTime(),
+      ]);
 
       return true;
     } catch (_err: any) {

@@ -1,10 +1,12 @@
 export type TPlayer = {
+  playerId: number;
   username: string;
   health: number;
   skills: Array<{ name: string; minDamage: number; maxDamage: number }>;
 };
 
-export interface TEnemy {
+export type TEnemy = {
+  enemyId: number
   health: number;
   name: string;
   minDamage: number;
@@ -19,6 +21,7 @@ export interface IPvERoom {
 }
 
 export type TPlayerDataR = Array<{
+  playerId: number;
   username: string;
   health: number;
   name: string;
