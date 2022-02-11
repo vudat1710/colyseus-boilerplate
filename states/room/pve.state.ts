@@ -13,9 +13,10 @@ export class PVERoom extends Schema {
   @type("boolean")
   didWin: boolean = false;
 
-  constructor(pveRoom: IPvERoom) {
+  constructor(player: Player, enemy: Enemy, didWin: boolean) {
     super();
-    this.player = new Player(pveRoom.player);
-    this.enemy = new Enemy(pveRoom.enemy);
+    this.player = player;
+    this.enemy = enemy;
+    this.didWin = false;
   }
 }

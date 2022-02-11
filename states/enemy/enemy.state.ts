@@ -25,4 +25,8 @@ export class Enemy extends Schema {
     this.maxDamage = enemy.maxDamage;
     this.health = enemy.health;
   }
+
+  public get getEnemyId() {
+    return this.enemyId;
+  }
 }

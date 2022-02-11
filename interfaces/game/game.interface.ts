@@ -6,12 +6,12 @@ export type TPlayer = {
 };
 
 export type TEnemy = {
-  enemyId: number
+  enemyId: number;
   health: number;
   name: string;
   minDamage: number;
   maxDamage: number;
-}
+};
 
 export interface IPvERoom {
   currentTurn: string;
@@ -21,15 +21,21 @@ export interface IPvERoom {
 }
 
 export type TPlayerDataR = Array<{
-  playerId: number;
+  playerid: number;
   username: string;
   health: number;
   name: string;
-  minDamage: number;
-  maxDamage: number;
+  mindamage: number;
+  maxdamage: number;
 }>;
 
-export type TEnemyR = Array<TEnemy>;
+export type TEnemyR = Array<{
+  enemyid: number;
+  health: number;
+  name: string;
+  mindamage: number;
+  maxdamage: number;
+}>;
 
 export enum EMatchType {
   PVE,

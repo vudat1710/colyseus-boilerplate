@@ -23,8 +23,9 @@
       "@errors/*": ["errors/*"],
       "@interfaces/*": ["interfaces/*"],
       "@models/*": ["models/*"],
-      "@test/*": ["test/*"]
-    }
+      "@test/*": ["tests/*"]
+    },
+    "types": ["node", "mocha"]
   },
   "exclude": ["node_modules"],
   "include": ["**/*"],
@@ -38,6 +39,6 @@
   "allowUnreachableCode": false,
   "experimentalDecorators": true,
   "emitDecoratorMetadata": true,
-  "types": ["node", "jest", "reflect-metadata"]
+  "types": ["node", "mocha", "reflect-metadata"]
 
 }

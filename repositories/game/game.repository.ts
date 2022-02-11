@@ -24,21 +24,21 @@ export class GameRepository implements IGameRepository {
         [playerId]
       );
       const player: TPlayer = {
-        playerId: result[0].playerId,
+        playerId: result[0].playerid,
         username: result[0].username,
         health: result[0].health,
         skills: result.map((row) => ({
           name: row.name,
-          minDamage: row.minDamage,
-          maxDamage: row.maxDamage,
+          minDamage: row.mindamage,
+          maxDamage: row.maxdamage,
         })),
       };
 
       return player;
     } catch (_err: any) {
-      const logMessage: string = _err.response.data.message;
+      const logMessage: string = _err.hint;
       logger.error(logMessage);
-      throw new GameError(_err.response.status, logMessage);
+      throw new GameError(_err.code, logMessage);
     }
   };
 
@@ -59,9 +59,9 @@ export class GameRepository implements IGameRepository {
 
       return true;
     } catch (_err: any) {
-      const logMessage: string = _err.response.data.message;
+      const logMessage: string = _err.hint;
       logger.error(logMessage);
-      throw new GameError(_err.response.status, logMessage);
+      throw new GameError(_err.code, logMessage);
     }
   };
 
@@ -72,12 +72,18 @@ export class GameRepository implements IGameRepository {
         [monsterId]
       );
 
-      const enemy: TEnemy = result[0];
+      const enemy: TEnemy = {
+        enemyId: result[0].enemyid,
+        maxDamage: result[0].maxdamage,
+        name: result[0].name,
+        minDamage: result[0].mindamage,
+        health: result[0].health,
+      };
       return enemy;
     } catch (_err: any) {
-      const logMessage: string = _err.response.data.message;
+      const logMessage: string = _err.hint;
       logger.error(logMessage);
-      throw new GameError(_err.response.status, logMessage);
+      throw new GameError(_err.code, logMessage);
     }
   };
 }

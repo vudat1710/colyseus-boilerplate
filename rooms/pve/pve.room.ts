@@ -30,7 +30,12 @@ export class PveGameRoom extends Room<PVERoom> {
     const playerData: TPlayer = await this.gameService.getPlayerData(
       options.playerId
     );
-    const player: Player = new Player(playerData);
+    const player: Player = new Player(
+      playerData.playerId,
+      playerData.username,
+      playerData.health,
+      playerData.skills
+    );
     player.sessionId = client.sessionId;
     player.seat = this.playerCount + 1;
     const enemyData: TEnemy = await this.gameService.getMonsterData(
@@ -38,9 +43,9 @@ export class PveGameRoom extends Room<PVERoom> {
     );
     const enemy: Enemy = new Enemy(enemyData);
 
-    this.state.player = player;
-    this.state.enemy = enemy;
-    this.state.didWin = false;
+    const newState: PVERoom = new PVERoom(player, enemy, false);
+    this.setState(newState);
+
     await this.gameService.logActionData(
       options.playerId,
       "Join room successful",
@@ -50,17 +55,16 @@ export class PveGameRoom extends Room<PVERoom> {
     this.lock();
   };
 
-  onLeave = async (client: Client, options) => {
+  onLeave = async (client: Client) => {
     logger.info(`client left ${client.sessionId}`);
-
-    delete this.state.player;
-    this.playerCount--;
     await this.gameService.logActionData(
-      this.state.player.playerId,
+      this.state.player.getPlayerId,
       "Player left",
       EMatchType.PVE,
-      this.state.enemy.enemyId
+      this.state.enemy.getEnemyId
     );
+    delete this.state.player;
+    this.playerCount--;
   };
 
   private onCombatMessage = () => {
@@ -128,7 +132,6 @@ export class PveGameRoom extends Room<PVERoom> {
   }
 
   private reset() {
-    this.state.didWin = false;
     this.unlock();
   }
 }

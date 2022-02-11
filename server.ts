@@ -17,7 +17,7 @@ const transport = new uWebSocketsTransport();
 const gameServer = new Server({
   transport,
   driver: new MongooseDriver(process.env.MONGO_URI),
-  presence: new RedisPresence(),
+  // presence: new RedisPresence(),
 });
 
 gameServer.onShutdown(function () {
@@ -26,5 +26,6 @@ gameServer.onShutdown(function () {
 gameServer.define("pve", PveGameRoom);
 
 gameServer.listen(PORT);
+console.log("server is up")
 
 export default gameServer;
