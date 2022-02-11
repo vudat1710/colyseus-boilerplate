@@ -7,6 +7,7 @@ import { Server, RedisPresence } from "colyseus";
 // import { monitor } from "@colyseus/monitor";
 import { MongooseDriver } from "@colyseus/mongoose-driver";
 import { uWebSocketsTransport } from "@colyseus/uwebsockets-transport";
+import { PveGameRoom } from "@rooms/pve/pve.room";
 
 dotenv.config();
 const PORT = Number(process.env.PORT || 8080);
@@ -22,6 +23,7 @@ const gameServer = new Server({
 gameServer.onShutdown(function () {
   logger.info(`Game server is going down.`);
 });
+gameServer.define("pve", PveGameRoom);
 
 gameServer.listen(PORT);
 

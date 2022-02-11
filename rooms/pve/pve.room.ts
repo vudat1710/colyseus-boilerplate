@@ -6,7 +6,7 @@ import GameService from "@services/game/game.service";
 import { TPlayer, TEnemy, EMatchType } from "@interfaces/game/game.interface";
 import { getRandomArbitrary } from "@utils/utils";
 
-export class GameRoom extends Room<PVERoom> {
+export class PveGameRoom extends Room<PVERoom> {
   maxClients: number = 1;
   playerCount: number = 0;
   private gameService: IGameService = new GameService();
