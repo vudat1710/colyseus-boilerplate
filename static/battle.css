@@ -1,0 +1,40 @@
+.container {
+  display: flex;
+  margin-top: 25px;
+}
+
+.container .player {
+  width: 50%;
+}
+
+.container .enemy {
+  width: 50%;
+}
+
+.container .player .username {
+  display: block;
+}
+
+.container .player .health {
+  display: block;
+}
+
+.container .player .skills {
+  display: flex;
+}
+
+.container .player .skill {
+  width: 33%;
+}
+
+.container .player .skill .skill-button {
+  width: 33%;
+}
+
+.container .enemy .name {
+  display: block;
+}
+
+.container .enemy .health {
+  display: block;
+}

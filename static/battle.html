@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width" />
+
+    <style>
+      body {
+        font-family: Tahoma, Geneva, sans-serif;
+      }
+    </style>
+
+    <!-- colyseus.js client -->
+    <script
+      type="text/javascript"
+      src="https://unpkg.com/colyseus.js@^0.14.0/dist/colyseus.js"
+    ></script>
+
+    <style type="text/css">
+      .items {
+        width: 100px;
+        height: 100px;
+        position: absolute;
+        padding-top: 24px;
+        box-sizing: border-box;
+        left: 0;
+        top: 0;
+      }
+    </style>
+    <link rel="stylesheet" href="battle.css" />
+    <script async src="/cdn-cgi/bm/cv/669835187/api.js"></script>
+  </head>
+
+  <body>
+    <h1>
+      <a href="https://github.com/colyseus/colyseus-examples"
+        ><img
+          src="https://cdn.jsdelivr.net/gh/colyseus/colyseus@master/media/header.png"
+          height="100"
+          alt="colyseus"
+      /></a>
+    </h1>
+
+    <p>
+      This example shows how to use custom data structures in your room's state.
+    </p>
+
+    <strong>commands</strong><br />
+    <div id="messages"></div>
+
+    <button onclick="joinRoom()" id="join">Join Room</button>
+
+    <div class="container" id="game">
+      <div class="player">
+        <div class="username"></div>
+        <div class="health"></div>
+        <div class="skills"></div>
+      </div>
+      <div class="enemy">
+        <div class="name"></div>
+        <div class="health"></div>
+      </div>
+    </div>
+    <br />
+    <script>
+      var room;
+
+      function attack(name) {
+        room.send("attack", { name: name });
+      }
+
+      function joinRoom() {
+        var host = window.document.location.host.replace(/:.*/, "");
+
+        var client = new Colyseus.Client(
+          location.protocol.replace("http", "ws") +
+            "//" +
+            host +
+            (location.port ? ":" + location.port : "")
+        );
+
+        client
+          .joinOrCreate("pve", { playerId: 1, enemyId: 1 })
+          .then((room_instance) => {
+            room = room_instance;
+
+            var players = {};
+            var colors = ["red", "green", "yellow", "blue", "cyan", "magenta"];
+            var container = document.getElementById("game");
+            room.onStateChange.once((state) => {
+              var domPlayer = document.getElementsByClassName("player")[0];
+              domPlayer.getElementsByClassName(
+                "username"
+              )[0].innerText = `Username: ${state.player.username}`;
+              domPlayer.getElementsByClassName(
+                "health"
+              )[0].innerText = `Health: ${state.player.health}`;
+
+              var domEnemy = document.getElementsByClassName("enemy")[0];
+              domEnemy.getElementsByClassName(
+                "name"
+              )[0].innerText = `Name: ${state.enemy.name}`;
+              domEnemy.getElementsByClassName(
+                "health"
+              )[0].innerText = `Health: ${state.enemy.health}`;
+
+              var skills = domPlayer.getElementsByClassName("skills")[0];
+              state.player.skills.forEach((skill) => {
+                var outer = document.createElement("div");
+                outer.className = "skill";
+                var button = document.createElement("button");
+                button.className = "skill-button";
+                button.innerText = `${skill.name}\n(${skill.minDamage}-${skill.maxDamage})`;
+                button.onclick = () => attack(skill.name);
+
+                outer.appendChild(button);
+                skills.appendChild(outer);
+              });
+              room.onStateChange((state) => {
+                var player = document.getElementsByClassName("player")[0];
+                var health = player.getElementsByClassName("health")[0];
+                health.innerText =
+                  state.player.health >= 0 ? state.player.health : 0;
+
+                var enemy = document.getElementsByClassName("enemy")[0];
+                var health = enemy.getElementsByClassName("health")[0];
+                health.innerText =
+                  state.enemy.health >= 0 ? state.enemy.health : 0;
+              });
+              room.onMessage("turn-for-bot", () => {
+                room.send("bot-attack");
+              });
+            });
+
+            var joinRoomButton = document
+              .getElementById("join")
+              .setAttribute("disabled", true);
+          });
+      }
+    </script>
+    <script type="text/javascript">
+      (function () {
+        window["__CF$cv$params"] = {
+          r: "6dbc1f38ff47c6a4",
+          m: "rokJa11PfUi2EccsYVXwOABsSILBhP1z9BVx.WHQxs0-1644567248-0-AYkYeN+d5qIHFhUYk6PbWKhJoMJfnPchMLIgGojoFLrS4Jh9lXvf/P0Cp8EeSMsa2z5+OuKL5IudWI4/8W7vA4SG3bBkKY+Vw80qQEq/v+BB36c4/jgI3gQasbh/ZhTq6ioQgORbWAwSWLG79eyzbREjW5vyu2S0Pqzm/aRdNTNG5FjvoyNKBDa0w9ePAjGTMw==",
+          s: [0xb3e2bef6dc, 0x56dd5cc53f],
+        };
+      })();
+    </script>
+  </body>
+</html>

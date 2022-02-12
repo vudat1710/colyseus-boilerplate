@@ -68,43 +68,44 @@ export class PveGameRoom extends Room<PVERoom> {
   };
 
   private onCombatMessage = () => {
-    this.onMessage(
-      "attack",
-      async (_client: Client, data: { name: string }) => {
-        const selectedSkill: Skill = this.state.player.skills.filter(
-          (s: Skill) => s.name === data.name
-        )[0];
-        const damage: number = getRandomArbitrary(
-          selectedSkill.minDamage,
-          selectedSkill.maxDamage
-        );
-        this.state.enemy.health -= damage;
-        if (this.state.enemy.health <= 0) {
-          this.state.didWin = true;
-          await this.gameService.logActionData(
-            this.state.player.playerId,
-            "Player win",
-            EMatchType.PVE,
-            this.state.enemy.enemyId
-          );
-        } else {
-          this.broadcast("bot-attacking");
-        }
-
+    this.onMessage("attack", async (client: Client, data: { name: string }) => {
+      const selectedSkill: Skill = this.state.player.skills.filter(
+        (s: Skill) => s.name === data.name
+      )[0];
+      const damage: number = getRandomArbitrary(
+        selectedSkill.minDamage,
+        selectedSkill.maxDamage
+      );
+      this.state.enemy.health -= damage;
+      if (this.state.enemy.health <= 0) {
+        this.state.didWin = true;
         await this.gameService.logActionData(
           this.state.player.playerId,
-          `Player did ${damage} damage using ${data.name}`,
+          "Player win",
           EMatchType.PVE,
           this.state.enemy.enemyId
         );
+      } else {
+        // client.send("bot-attack", {});
+        this.broadcast("turn-for-bot", "abc")
+        console.log("Enemy's health: ", this.state.enemy.getEnemyHealth);
+        return;
       }
-    );
 
-    this.onMessage("bot-attack", async (_client: Client, data: {}) => {
+      await this.gameService.logActionData(
+        this.state.player.playerId,
+        `Player did ${damage} damage using ${data.name}`,
+        EMatchType.PVE,
+        this.state.enemy.enemyId
+      );
+    });
+
+    this.onMessage("bot-attack", async (client: Client, data: {}) => {
       const damage: number = getRandomArbitrary(
         this.state.enemy.minDamage,
         this.state.enemy.maxDamage
       );
+      console.log("bot-damage: ", damage)
       this.state.player.health -= damage;
       if (this.state.player.health <= 0) {
         this.state.didWin = false;
@@ -115,7 +116,9 @@ export class PveGameRoom extends Room<PVERoom> {
           this.state.enemy.enemyId
         );
       } else {
-        this.broadcast("client-attacking");
+        this.broadcast("turn-for-player", "abc")
+        console.log("Player's health: ", this.state.player.getPlayerHealth);
+        return;
       }
 
       await this.gameService.logActionData(

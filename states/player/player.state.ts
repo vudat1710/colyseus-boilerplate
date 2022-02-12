@@ -41,4 +41,8 @@ export class Player extends Schema {
   public get getPlayerId() {
     return this.playerId;
   }
+
+  public get getPlayerHealth() {
+    return this.health;
+  }
 }

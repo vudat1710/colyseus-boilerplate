@@ -29,4 +29,8 @@ export class Enemy extends Schema {
   public get getEnemyId() {
     return this.enemyId;
   }
+
+  public get getEnemyHealth() {
+    return this.health;
+  }
 }

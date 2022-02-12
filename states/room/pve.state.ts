@@ -17,6 +17,6 @@ export class PVERoom extends Schema {
     super();
     this.player = player;
     this.enemy = enemy;
-    this.didWin = false;
+    this.didWin = didWin;
   }
 }
